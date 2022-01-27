@@ -33,7 +33,7 @@ public class GUI extends JFrame implements ActionListener {
 
             } else if (e.getSource() == buttonClean) {
                 if (Integer.parseInt(txtU.getText()) < 2)
-                    System.out.println("Impossible de cr?er un arbre dont le nombre de cl?s est inf?rieur ? 2.");
+                    System.out.println("Impossible de créer un arbre dont le nombre de clés est inférieur ? 2.");
                 else
                     bInt = new BTreePlus<Integer>(Integer.parseInt(txtU.getText()), testInt);
             } else if (e.getSource() == buttonSave) {
