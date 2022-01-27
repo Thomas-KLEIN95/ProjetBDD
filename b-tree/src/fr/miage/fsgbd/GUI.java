@@ -51,7 +51,7 @@ public class GUI extends JFrame implements ActionListener {
                     boolean done = bInt.addValeur(valeur);
 
 					/*
-					  On pourrait forcer l'ajout mais on risque alors de tomber dans une boucle infinie sans "r?gle" faisant sens pour en sortir
+					  On pourrait forcer l'ajout mais on risque alors de tomber dans une boucle infinie sans "règle" faisant sens pour en sortir
 
 					while (!done)
 					{
