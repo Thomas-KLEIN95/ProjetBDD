@@ -20,6 +20,9 @@ public class Noeud<Type> implements java.io.Serializable {
     // Noeud Parent du noeud courant
     private Noeud<Type> parent;
 
+    // Feuille qui suit la feuille courante (feuille = noeud sans fils)
+    public Noeud<Type> feuilleSuivante = null;
+
     // Classe interfaçant "Executable" et donc contenant une procédure de comparaison de <Type>
     private Executable compar;
 
@@ -269,6 +272,11 @@ public class Noeud<Type> implements java.io.Serializable {
                                 precedent.keys.add(valeurADeplacer);
                                 noeud.keys.remove(0);
                             }
+                            // Si le noeud courant est une feuille (si il n'a pas de fils)
+                            if(noeud.fils.isEmpty()) {
+                                //On définit noeudDroit comme la feuille suivante de noeudGauche
+                                precedent.feuilleSuivante = suivant;
+                            }
                         }
                         else if (!noeud.keys.isEmpty() && suivant != null && suivant.keys.size() < u) // Même opération avec le noeud suivant
                         {
@@ -277,6 +285,11 @@ public class Noeud<Type> implements java.io.Serializable {
                                 suivant.keys.add(0,noeud.keys.get(noeud.keys.size()-1));
                                 remplacerDansParents(noeud,suivant.keys.get(1), suivant.keys.get(0));
                                 noeud.keys.remove(noeud.keys.size()-1);
+                            }
+                            // Si le noeud courant est une feuille (si il n'a pas de fils)
+                            if(noeud.fils.isEmpty()) {
+                                //On définit noeudDroit comme la feuille suivante de noeudGauche
+                                precedent.feuilleSuivante = suivant;
                             }
                         }
                         else // si pas de précédent ou de suivant / pas de place / le noeud courant est le seul fils > On réduit la hauteur
@@ -454,6 +467,12 @@ public class Noeud<Type> implements java.io.Serializable {
                 // On crée deux nouveaux noeuds
                 Noeud<Type> noeudGauche = new Noeud<Type>(u, compar, null);
                 Noeud<Type> noeudDroit = new Noeud<Type>(u, compar, null);
+
+                // Si le noeud courant est une feuille (si il n'a pas de fils)
+                if(noeud.fils.isEmpty()) {
+                    //On définit noeudDroit comme la feuille suivante de noeudGauche
+                    noeudGauche.feuilleSuivante = noeudDroit;
+                }
 
                 // On insère la valeur comme nouvelle clef du noeud courant
                 noeud.insert(nouvelleValeur);
