@@ -14,8 +14,8 @@ import java.util.ArrayList;
 public class GUI extends JFrame implements ActionListener {
     TestInteger testInt = new TestInteger();
     BTreePlus<Integer> bInt;
-    private JButton buttonClean, buttonRemove, buttonLoad, buttonSave, buttonAddMany, buttonAddItem, buttonRefresh;
-    private JTextField txtNbreItem, txtNbreSpecificItem, txtU, txtFile, removeSpecific;
+    private JButton buttonClean, buttonRemove, buttonLoad, buttonSave, buttonAddMany, buttonAddItem, buttonRefresh, buttonLoadCSV;
+    private JTextField txtNbreItem, txtNbreSpecificItem, txtU, txtFile, removeSpecific, txtFileCSV;
     private final JTree tree = new JTree();
 
     public GUI() {
@@ -24,7 +24,7 @@ public class GUI extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == buttonLoad || e.getSource() == buttonClean || e.getSource() == buttonSave || e.getSource() == buttonRefresh) {
+        if (e.getSource() == buttonLoad || e.getSource() == buttonClean || e.getSource() == buttonSave || e.getSource() == buttonRefresh || e.getSource() == buttonLoadCSV ) {
             if (e.getSource() == buttonLoad) {
                 BDeserializer<Integer> load = new BDeserializer<Integer>();
                 bInt = load.getArbre(txtFile.getText());
@@ -40,7 +40,10 @@ public class GUI extends JFrame implements ActionListener {
                 BSerializer<Integer> save = new BSerializer<Integer>(bInt, txtFile.getText());
             }else if (e.getSource() == buttonRefresh) {
                 tree.updateUI();
-            }
+            } else if (e.getSource() == buttonLoadCSV) {
+                FichierReader fichierCSV = new FichierReader();
+                bInt = fichierCSV.lireCSV(txtFileCSV.getText(),Integer.parseInt(txtU.getText()),testInt);
+        }
         } else {
             if (bInt == null)
                 bInt = new BTreePlus<Integer>(Integer.parseInt(txtU.getText()), testInt);
@@ -203,16 +206,37 @@ public class GUI extends JFrame implements ActionListener {
         c.gridwidth = 1;
         pane1.add(buttonLoad, c);
 
-        buttonClean = new JButton("Reset");
+        JLabel labelFilenameCSV = new JLabel("Nom du fichier CSV : ");
+        c.gridx = 0;
+        c.gridy = 6;
+        c.weightx = 1;
+        c.gridwidth = 1;
+        pane1.add(labelFilenameCSV, c);
+
+        txtFileCSV = new JTextField("steam_games.csv", 7);
+        c.gridx = 1;
+        c.gridy = 6;
+        c.weightx = 1;
+        c.gridwidth = 1;
+        pane1.add(txtFileCSV, c);
+
+        buttonLoadCSV = new JButton("Charger le CSV");
         c.gridx = 2;
         c.gridy = 6;
+        c.weightx = 1;
+        c.gridwidth = 2;
+        pane1.add(buttonLoadCSV, c);
+
+        buttonClean = new JButton("Reset");
+        c.gridx = 2;
+        c.gridy = 7;
         c.weightx = 1;
         c.gridwidth = 2;
         pane1.add(buttonClean, c);
 
         buttonRefresh = new JButton("Refresh");
         c.gridx = 2;
-        c.gridy = 7;
+        c.gridy = 8;
         c.weightx = 1;
         c.gridwidth = 2;
         pane1.add(buttonRefresh, c);
@@ -222,7 +246,7 @@ public class GUI extends JFrame implements ActionListener {
         c.weighty = 1.0;   //request any extra vertical space
         c.gridwidth = 4;   //2 columns wide
         c.gridx = 0;
-        c.gridy = 8;
+        c.gridy = 9;
 
         JScrollPane scrollPane = new JScrollPane(tree);
         pane1.add(scrollPane, c);
@@ -238,6 +262,7 @@ public class GUI extends JFrame implements ActionListener {
         buttonRemove.addActionListener(this);
         buttonClean.addActionListener(this);
         buttonRefresh.addActionListener(this);
+        buttonLoadCSV.addActionListener(this);
 
         return pane1;
     }
