@@ -1,6 +1,9 @@
 package fr.miage.fsgbd;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -9,9 +12,14 @@ import javax.swing.tree.DefaultMutableTreeNode;
  */
 public class BTreePlus<Type> implements java.io.Serializable {
     private Noeud<Type> racine;
+    private HashMap<Integer, Integer> CSVLines;
+    private Integer line;
+    private boolean readingCSV;
 
     public BTreePlus(int u, Executable e) {
         racine = new Noeud<Type>(u, e, null);
+        CSVLines = new HashMap<>();
+        readingCSV = false;
     }
 
     public void afficheArbre() {
@@ -44,6 +52,10 @@ public class BTreePlus<Type> implements java.io.Serializable {
         System.out.println("Ajout de la valeur : " + valeur.toString());
         if (racine.contient(valeur) == null) {
             Noeud<Type> newRacine = racine.addValeur(valeur);
+            if(readingCSV == true){
+                CSVLines.put((Integer) valeur, line);
+                line++;
+            }
             if (racine != newRacine)
                 racine = newRacine;
             return true;
@@ -59,5 +71,35 @@ public class BTreePlus<Type> implements java.io.Serializable {
             if (racine != newRacine)
                 racine = newRacine;
         }
+    }
+
+    /**
+     * Lire un fichier CSV avec HashMap
+     * @param status
+     */
+    public void setReadingCSV(boolean status){
+        readingCSV = status;
+        if(status == true){
+            line = 2;
+            CSVLines.clear();
+        }
+    }
+
+    /**
+     * Obtenir le nombre de lignes totales du fichier CSV grâce à HashMap
+     * @return nombre totale de lignes du fichier CSV
+     */
+    public Integer getNbLinesCSV(){
+        return CSVLines.size();
+    }
+
+    /**
+     * Obtenir la clé par la valeur
+     * @param pos valeur recherchée
+     * @return tableau contenant les clés associées aux valeurs
+     */
+    public Integer getKeyFromPos(Integer pos){
+        ArrayList<Integer> keys = new ArrayList<Integer>(CSVLines.keySet());
+        return keys.get(pos);
     }
 }

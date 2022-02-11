@@ -6,7 +6,6 @@ import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 /**
  * @author Galli Gregory, Mopolo Moke Gabriel
@@ -14,8 +13,9 @@ import java.util.ArrayList;
 public class GUI extends JFrame implements ActionListener {
     TestInteger testInt = new TestInteger();
     BTreePlus<Integer> bInt;
-    private JButton buttonClean, buttonRemove, buttonLoad, buttonSave, buttonAddMany, buttonAddItem, buttonRefresh, buttonLoadCSV;
-    private JTextField txtNbreItem, txtNbreSpecificItem, txtU, txtFile, removeSpecific, txtFileCSV;
+    CSVSearchStats CSVStats;
+    private JButton buttonClean, buttonRemove, buttonLoad, buttonSave, buttonAddMany, buttonAddItem, buttonRefresh, buttonLoadCSV, buttonSearchSeq, buttonSearchIndex, buttonSearchMany;
+    private JTextField txtNbreItem, txtNbreSpecificItem, txtU, txtFile, removeSpecific, txtFileCSV, txtId, txtSearchMany;
     private final JTree tree = new JTree();
 
     public GUI() {
@@ -43,6 +43,7 @@ public class GUI extends JFrame implements ActionListener {
             } else if (e.getSource() == buttonLoadCSV) {
                 CSVFileLoader fichierCSV = new CSVFileLoader();
                 bInt = fichierCSV.loadCSV(txtFileCSV.getText(),Integer.parseInt(txtU.getText()),testInt);
+                CSVStats = new CSVSearchStats(bInt);
             }
         } else {
             if (bInt == null)
@@ -75,6 +76,12 @@ public class GUI extends JFrame implements ActionListener {
 
             } else if (e.getSource() == buttonRemove) {
                 bInt.removeValeur(Integer.parseInt(removeSpecific.getText()));
+            } else if (e.getSource() == buttonSearchMany) {
+                CSVStats.searchMany(Integer.parseInt(txtSearchMany.getText()));
+            } else if (e.getSource() == buttonSearchSeq) {
+                // recherche sequencielle
+            }else if (e.getSource() == buttonSearchIndex) {
+                // recherche par index
             }
         }
 
@@ -227,16 +234,65 @@ public class GUI extends JFrame implements ActionListener {
         c.gridwidth = 2;
         pane1.add(buttonLoadCSV, c);
 
-        buttonClean = new JButton("Reset");
+        JLabel labelRecherche = new JLabel("Recherche : ");
+        c.gridx = 0;
+        c.gridy = 7;
+        c.weightx = 1;
+        c.gridwidth = 1;
+        pane1.add(labelRecherche, c);
+
+        txtId = new JTextField("2", 7);
+        c.gridx = 1;
+        c.gridy = 7;
+        c.weightx = 1;
+        c.gridwidth = 1;
+        pane1.add(txtId, c);
+
+        buttonSearchSeq = new JButton("Recherche séquencielle");
         c.gridx = 2;
         c.gridy = 7;
+        c.weightx = 0.5;
+        c.gridwidth = 1;
+        pane1.add(buttonSearchSeq, c);
+
+        buttonSearchIndex = new JButton("Recherche par index");
+        c.gridx = 3;
+        c.gridy = 7;
+        c.weightx = 0.5;
+        c.gridwidth = 1;
+        pane1.add(buttonSearchIndex, c);
+
+        JLabel labelRechercheMany = new JLabel("Recherche de x valeurs : ");
+        c.gridx = 0;
+        c.gridy = 8;
+        c.weightx = 1;
+        c.gridwidth = 1;
+        pane1.add(labelRechercheMany, c);
+
+        txtSearchMany = new JTextField("100", 7);
+        c.gridx = 1;
+        c.gridy = 8;
+        c.weightx = 1;
+        c.gridwidth = 1;
+        pane1.add(txtSearchMany, c);
+
+        buttonSearchMany = new JButton("Rechercher x valeurs ");
+        c.gridx = 2;
+        c.gridy = 8;
+        c.weightx = 1;
+        c.gridwidth = 2;
+        pane1.add(buttonSearchMany, c);
+
+        buttonClean = new JButton("Reset");
+        c.gridx = 2;
+        c.gridy = 9;
         c.weightx = 1;
         c.gridwidth = 2;
         pane1.add(buttonClean, c);
 
         buttonRefresh = new JButton("Refresh");
         c.gridx = 2;
-        c.gridy = 8;
+        c.gridy = 10;
         c.weightx = 1;
         c.gridwidth = 2;
         pane1.add(buttonRefresh, c);
@@ -246,7 +302,7 @@ public class GUI extends JFrame implements ActionListener {
         c.weighty = 1.0;   //request any extra vertical space
         c.gridwidth = 4;   //2 columns wide
         c.gridx = 0;
-        c.gridy = 9;
+        c.gridy = 11;
 
         JScrollPane scrollPane = new JScrollPane(tree);
         pane1.add(scrollPane, c);
@@ -254,6 +310,9 @@ public class GUI extends JFrame implements ActionListener {
         tree.setModel(new DefaultTreeModel(null));
         tree.updateUI();
 
+        /**
+         * Les écouteurs
+         */
         txtNbreItem.addActionListener(this);
         buttonAddItem.addActionListener(this);
         buttonAddMany.addActionListener(this);
@@ -263,6 +322,9 @@ public class GUI extends JFrame implements ActionListener {
         buttonClean.addActionListener(this);
         buttonRefresh.addActionListener(this);
         buttonLoadCSV.addActionListener(this);
+        buttonSearchSeq.addActionListener(this);
+        buttonSearchIndex.addActionListener(this);
+        buttonSearchMany.addActionListener(this);
 
         return pane1;
     }
