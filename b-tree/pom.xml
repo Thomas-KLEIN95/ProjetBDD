@@ -14,11 +14,20 @@
     </properties>
 
     <dependencies>
+        <!-- dépendance pour récupérer un fichier CSV -->
         <dependency>
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
             <version>5.5.2</version>
         </dependency>
+
+        <!-- dépendance pour le timer (stats) -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.11</version>
+        </dependency>
+
     </dependencies>
     
 </project>

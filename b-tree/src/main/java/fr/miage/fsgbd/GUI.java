@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
  * @author Galli Gregory, Mopolo Moke Gabriel
  */
 public class GUI extends JFrame implements ActionListener {
+
     TestInteger testInt = new TestInteger();
     BTreePlus<Integer> bInt;
     CSVSearchStats CSVStats;
@@ -41,7 +42,7 @@ public class GUI extends JFrame implements ActionListener {
             } else if (e.getSource() == buttonRefresh) {
                 tree.updateUI();
             } else if (e.getSource() == buttonLoadCSV) {
-                CSVFileLoader fichierCSV = new CSVFileLoader();
+                CSVFileLoader fichierCSV = new CSVFileLoader(); //creation d'un fichier CSV
                 bInt = fichierCSV.loadCSV(txtFileCSV.getText(),Integer.parseInt(txtU.getText()),testInt);
                 CSVStats = new CSVSearchStats(bInt);
             }
@@ -79,9 +80,11 @@ public class GUI extends JFrame implements ActionListener {
             } else if (e.getSource() == buttonSearchMany) {
                 CSVStats.searchMany(Integer.parseInt(txtSearchMany.getText()));
             } else if (e.getSource() == buttonSearchSeq) {
-                // recherche sequencielle
+                // recherche sequentielle
+                CSVStats.seqSearch(Integer.parseInt(txtId.getText()));
             }else if (e.getSource() == buttonSearchIndex) {
                 // recherche par index
+                CSVStats.indexSearch(Integer.parseInt(txtId.getText()));
             }
         }
 
