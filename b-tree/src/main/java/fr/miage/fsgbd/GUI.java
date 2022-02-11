@@ -33,17 +33,17 @@ public class GUI extends JFrame implements ActionListener {
 
             } else if (e.getSource() == buttonClean) {
                 if (Integer.parseInt(txtU.getText()) < 2)
-                    System.out.println("Impossible de créer un arbre dont le nombre de clés est inférieur ? 2.");
+                    System.out.println("Impossible de créer un arbre dont le nombre de clés est inférieur à 2.");
                 else
                     bInt = new BTreePlus<Integer>(Integer.parseInt(txtU.getText()), testInt);
             } else if (e.getSource() == buttonSave) {
                 BSerializer<Integer> save = new BSerializer<Integer>(bInt, txtFile.getText());
-            }else if (e.getSource() == buttonRefresh) {
+            } else if (e.getSource() == buttonRefresh) {
                 tree.updateUI();
             } else if (e.getSource() == buttonLoadCSV) {
-                FichierReader fichierCSV = new FichierReader();
-                bInt = fichierCSV.lireCSV(txtFileCSV.getText(),Integer.parseInt(txtU.getText()),testInt);
-        }
+                CSVFileLoader fichierCSV = new CSVFileLoader();
+                bInt = fichierCSV.loadCSV(txtFileCSV.getText(),Integer.parseInt(txtU.getText()),testInt);
+            }
         } else {
             if (bInt == null)
                 bInt = new BTreePlus<Integer>(Integer.parseInt(txtU.getText()), testInt);
