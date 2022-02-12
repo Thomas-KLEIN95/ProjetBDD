@@ -7,6 +7,9 @@ Membres du groupe 5 ayant réalisé le projet java :
 
 Nous avons réalisé ce projet de développement à 2. 
 
+## Rôles dans le projet 
+- CHENG Wen-Miin : chargement du fichier CSV, les statistiques liées aux recherches. 
+- KLEIN Thomas : les fonctionnalités de recherches : séquentielle et par index, ajout de la liaison entre clé et pointeur, effectuer différentes recherches.
 
 ## Pour lancer le projet : 
 - avoir Maven
