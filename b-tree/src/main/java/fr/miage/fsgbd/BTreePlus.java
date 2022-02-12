@@ -102,4 +102,20 @@ public class BTreePlus<Type> implements java.io.Serializable {
         ArrayList<Integer> keys = new ArrayList<Integer>(CSVLines.keySet());
         return keys.get(pos);
     }
+
+    public Noeud<Type> getPremiereFeuille(){
+        Noeud feuille = racine;
+        while(!feuille.fils.isEmpty()){
+            feuille = (Noeud) feuille.fils.get(0);
+        }
+        return feuille;
+    }
+
+    public boolean rechercheSeq(Integer valeur){
+        return getPremiereFeuille().rechercheSeq(valeur);
+    }
+
+    public boolean rechecheIndex(Integer valeur){
+        return racine.rechercheIndex(valeur);
+    }
 }

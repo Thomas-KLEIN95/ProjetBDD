@@ -77,14 +77,17 @@ public class GUI extends JFrame implements ActionListener {
 
             } else if (e.getSource() == buttonRemove) {
                 bInt.removeValeur(Integer.parseInt(removeSpecific.getText()));
-            } else if (e.getSource() == buttonSearchMany) {
-                CSVStats.searchMany(Integer.parseInt(txtSearchMany.getText()));
-            } else if (e.getSource() == buttonSearchSeq) {
-                // recherche sequentielle
-                CSVStats.seqSearch(Integer.parseInt(txtId.getText()));
-            }else if (e.getSource() == buttonSearchIndex) {
-                // recherche par index
-                CSVStats.indexSearch(Integer.parseInt(txtId.getText()));
+            } else if(e.getSource() == buttonSearchMany || e.getSource() == buttonSearchSeq || e.getSource() == buttonSearchIndex) {
+                CSVStats = new CSVSearchStats(bInt);
+                if (e.getSource() == buttonSearchMany) {
+                    CSVStats.searchMany(Integer.parseInt(txtSearchMany.getText()));
+                } else if (e.getSource() == buttonSearchSeq) {
+                    // recherche sequentielle
+                    CSVStats.seqSearch(Integer.parseInt(txtId.getText()));
+                } else if (e.getSource() == buttonSearchIndex) {
+                    // recherche par index
+                    CSVStats.indexSearch(Integer.parseInt(txtId.getText()));
+                }
             }
         }
 

@@ -13,8 +13,6 @@ import java.util.concurrent.TimeUnit;
 
 public class CSVSearchStats {
     BTreePlus bTree;
-    Float searchTime;
-    float minTimeSeq, maxTimeSeq, avgTimeSeq, minTimeIndex, maxTimeIndex, avgTimeIndex;
 
     /**
      * Constructeur
@@ -29,9 +27,7 @@ public class CSVSearchStats {
      * @param value la valeur recherchée de manière séquencielle
      */
     public void seqSearch(Integer value){
-
-        //appel recherche sequentielle sur btree
-
+        bTree.rechercheSeq(value);
     }
 
     /**
@@ -39,9 +35,7 @@ public class CSVSearchStats {
      * @param value la valeur recherchée par indexation
      */
     public void indexSearch(Integer value){
-
-        //appel recherche par index sur btree
-
+        bTree.rechecheIndex(value);
     }
 
     /**
@@ -50,9 +44,9 @@ public class CSVSearchStats {
      */
     public void searchMany(Integer nb){
         //variables pour stats pour recherches séquentielles
-        long tempsMinSeq = 0, tempsMaxSeq = 0, tempsMoyenSeq = 0;
+        long tempsMinSeq = -1, tempsMaxSeq = 0, tempsMoyenSeq = 0;
         //variables pour stats pour recherches par index
-        long tempsMinIndex = 0, tempsMaxIndex = 0, tempsMoyenIndex = 0;
+        long tempsMinIndex = -1, tempsMaxIndex = 0, tempsMoyenIndex = 0;
 
         long temps = 0; //temps d'une recherche
         StopWatch stopWatch = new StopWatch(); // creation d'un timer
@@ -76,18 +70,17 @@ public class CSVSearchStats {
             seqSearch(key); //recherche séquentielle
             stopWatch.stop(); //fin timer
 
-            temps = stopWatch.getTime(TimeUnit.MILLISECONDS); //sauvegarde du temps
+            temps = stopWatch.getTime(TimeUnit.NANOSECONDS); //sauvegarde du temps
 
             if (tempsMaxSeq < temps){ // si le temps max est plus petit que le temps actuel
                 tempsMaxSeq = temps; // le temps actuel devient le temps max
-
+            } else if(tempsMinSeq == -1){
+                tempsMinSeq = temps;
             } else if (tempsMinSeq > temps) { // si le temps min est plus grand que le temps actuel
                 tempsMinSeq = temps; // le temps actuel devient le temps min
             }
 
             tempsMoyenSeq = temps + tempsMoyenSeq; //total des temps recherches
-            tempsMoyenSeq = tempsMoyenSeq / nb; // calcul du temps moyen
-
 
             stopWatch.reset(); //reset du timer pour la recherche suivante
 
@@ -97,29 +90,31 @@ public class CSVSearchStats {
             indexSearch(key); //recherche par index
             stopWatch.stop(); //fin timer
 
-            temps = stopWatch.getTime(TimeUnit.MILLISECONDS);
+            temps = stopWatch.getTime(TimeUnit.NANOSECONDS);
 
             if (tempsMaxIndex < temps){ // si le temps max est plus petit que le temps actuel
                 tempsMaxIndex = temps; // le temps actuel devient le temps max
-
-            } else if (tempsMinIndex > temps) { // si le temps min est plus grand que le temps actuel
+            } else if(tempsMinIndex == -1){
+                tempsMinIndex = temps;
+            }  else if (tempsMinIndex > temps) { // si le temps min est plus grand que le temps actuel
                 tempsMinIndex = temps; // le temps actuel devient le temps min
             }
 
             tempsMoyenIndex = temps + tempsMoyenIndex; //total des temps recherches
-            tempsMoyenIndex = tempsMoyenIndex / nb; // calcul du temps moyen
 
             stopWatch.reset(); //reset du timer pour la recherche suivante
 
         }
+        tempsMoyenSeq = tempsMoyenSeq / nb; // calcul du temps moyen des recherches séquentielles
+        tempsMoyenIndex = tempsMoyenIndex / nb; // calcul du temps moyen des recherches par index
 
-        System.out.println("Pour une recherche séquentielle, le temps minimum est de " + tempsMinSeq + " millisecondes, " +
-                "le temps maximum est de " + tempsMaxSeq + " millisecondes, " +
-                "et le temps moyen est de " + tempsMoyenSeq) ;
+        System.out.println("Pour une recherche séquentielle de " + nb + " valeurs, le temps minimum est de " + tempsMinSeq + " nanosecondes, " +
+                "le temps maximum est de " + tempsMaxSeq + " nanosecondes, " +
+                "et le temps moyen est de " + tempsMoyenSeq  + " nanosecondes.") ;
 
-        System.out.println("Pour une recherche par index, le temps minimum est de " + tempsMinIndex + " millisecondes, " +
-                "le temps maximum est de " + tempsMaxIndex + " millisecondes, " +
-                "et le temps moyen est de " + tempsMoyenIndex) ;
+        System.out.println("Pour une recherche par index de " + nb + " valeurs, le temps minimum est de " + tempsMinIndex + " nanosecondes, " +
+                "le temps maximum est de " + tempsMaxIndex + " nanosecondes, " +
+                "et le temps moyen est de " + tempsMoyenIndex + " nanosecondes.") ;
 
     }
 }
