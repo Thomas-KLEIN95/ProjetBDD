@@ -4,6 +4,10 @@ Membres du groupe 5 ayant réalisé le projet java :
 - CHENG Wen-Miin 
 - KLEIN Thomas
 
+
+Nous avons réalisé ce projet de développement à 2. 
+
+
 ## Pour lancer le projet : 
 - avoir Maven
 - ajouter le jar OpenCSV se trouvant dans ../b-tree/lib/opencsv-5.5.2.jar dans les modules settings (F4 sur IntelliJ)
